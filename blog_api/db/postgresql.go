@@ -25,9 +25,9 @@ func init() {
 		"disable")
 
 	// connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: Db.Logger.LogMode(4),
-	})
+	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// Logger: Db.Logger.LogMode(4),
+	// })
 
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func init() {
 	if Db.Error != nil {
 		panic(Db.Error)
 	}
-	Db, err := Db.DB()
+	Db, _ := Db.DB()
 
 	Db.SetMaxIdleConns(dbConfig.MaxIdle)
 	Db.SetMaxOpenConns(dbConfig.MaxOpen)
