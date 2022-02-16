@@ -4,7 +4,7 @@ import "math"
 
 type Page struct {
 	// 當前頁面
-	Page int `json:"page`
+	Page int `json:"page"`
 	// 每頁記錄數
 	Size int `json:"size"`
 	// 總紀錄數

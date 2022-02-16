@@ -1,6 +1,7 @@
 package router
 
 import (
+	"api/api"
 	"api/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ func InitRouter() *gin.Engine {
 	// 跨域中間件
 	router.Use(middleware.Cors())
 
-	// 日治中間件
+	// 日誌中間件
 	router.Use(middleware.Logger())
 
 	register(router)
@@ -26,5 +27,11 @@ func InitRouter() *gin.Engine {
 }
 
 func register(router *gin.Engine) {
+	// api
+	// 查找blogger
+	v1 := router.Group("v1")
+	v1.GET("/blogger", api.FindBlogger)
+	v1.GET("/blog/type", api.FindType)
+	v1.GET("/blog/list", api.BlogList)
 
 }
