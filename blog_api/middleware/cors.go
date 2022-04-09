@@ -10,7 +10,10 @@ func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 
-		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Header("Access-Control-Allow-Headers", "Content-Type")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		// c.Header("Content-Type", "application/json")
 
 		// 放行所有 OPTIONS 方法
 		if method == "OPTIONS" {

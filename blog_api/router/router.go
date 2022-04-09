@@ -1,6 +1,7 @@
 package router
 
 import (
+	"api/admin"
 	"api/api"
 	"api/middleware"
 
@@ -29,9 +30,26 @@ func InitRouter() *gin.Engine {
 func register(router *gin.Engine) {
 	// api
 	// 查找blogger
-	v1 := router.Group("v1")
+	v1 := router.Group("api/v1")
 	v1.GET("/blogger", api.FindBlogger)
 	v1.GET("/blog/type", api.FindType)
-	v1.GET("/blog/list", api.BlogList)
+	v1.GET("/blog/list", api.BlogListWtihType)
+	v1.GET("/blog", api.FindBlog)
+	v1.PUT("/blog/:id", api.UpdateCommentId)
+	v1.POST("/blog/comment", api.PostCommet)
+
+	// back
+	v1.POST("/login", admin.Login)
+	v1.POST("/logout", admin.Logout)
+	v1.POST("/register", admin.Register)
+
+	jwt := v1.Group("/admin", middleware.Jwt())
+	jwt.GET("/blogger", admin.FindBlogger)
+	jwt.PUT("/info", admin.BloggerUpdateInfo) //目前更改 put post 之類的到這
+	jwt.PUT("/info/password", admin.BloggerUpdatePassword)
+	jwt.POST("/type/list", admin.TypeList)
+	jwt.POST("/type/save", admin.CreateType)
+	jwt.POST("/type/delete", admin.DeleteType)
+	jwt.PUT("/type/update", admin.UpdateType)
 
 }

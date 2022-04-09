@@ -7,6 +7,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Db *gorm.DB
@@ -25,7 +26,7 @@ func init() {
 		"disable")
 
 	// connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode((logger.Info))})
 	// Logger: Db.Logger.LogMode(4),
 	// })
 

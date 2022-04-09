@@ -14,7 +14,7 @@ import (
 // 上面的要想要使用 config, 就要先字串轉換為 int
 var Cache *cache.Cache = cache.New(time.Duration(7200)*time.Second, time.Duration(600)*time.Second)
 
-const DataFormat = "2020-01-02 15:03:00"
+const DateFormat = "2020-01-02 15:03:00"
 
 func GetDate(format string) string {
 	return time.Now().Format(format)

@@ -3,6 +3,7 @@ package api
 import (
 	"api/service"
 	"api/utils"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -24,25 +25,26 @@ func FindType(c *gin.Context) {
 	res.Json(c)
 }
 
-func BlogList(c *gin.Context) {
-	json := make(map[string]interface{})
-	err := c.ShouldBind(&json) // 綁定前端傳來的值, 匹配 json 的 map 格式
-	if err != nil {
-		res := &utils.Response{Code: 1000, Msg: "數據格式出錯"}
+func BlogListWtihType(c *gin.Context) {
+
+	blog := new(service.Blog)
+	// 字串轉 Int
+	page, _ := strconv.Atoi(c.Query("page"))
+	size, _ := strconv.Atoi(c.Query("size"))
+	typeId, err := strconv.Atoi(c.Query("type_id"))
+	fmt.Println(page, size)
+	if page == 0 || size == 0 {
+		res := &utils.Response{Code: 1000, Msg: "error input"}
 		res.Json(c)
 		return
 	}
-	blog := new(service.Blog)
-	// 字串轉 Int
-	page, _ := strconv.Atoi(utils.StrVal(json["page"]))
-	size, _ := strconv.Atoi(utils.StrVal(json["size"]))
 
 	strInt64 := strconv.FormatInt(blog.Count(), 10)
 	blogCount, _ := strconv.Atoi(strInt64)
 	pageVo := &utils.Page{Page: page, Size: size, Total: blogCount}
 
-	typeId, err := strconv.Atoi(utils.StrVal(json["type_id"]))
 	if err == nil {
+		fmt.Println("nilll~")
 		blog.TypeId = typeId
 	}
 	// 查詢blog list
@@ -54,5 +56,80 @@ func BlogList(c *gin.Context) {
 	}
 
 	res := &utils.Response{Code: 0, Msg: "", Data: result, Count: pageVo.Total}
+	res.Json(c)
+}
+
+func FindBlog(c *gin.Context) {
+	var blog service.Blog
+
+	blogId, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		res := &utils.Response{Code: 1000, Msg: err.Error()}
+		res.Json(c)
+		return
+	}
+	blog.Id = blogId
+
+	blog.UpdateClick()
+	blogContent := blog.FindBlogContent()
+	fmt.Printf("Print content: %v", blogContent)
+	blogComment := blog.FindCommentByBlog()
+	next := blog.FindNextOne()
+	previous := blog.FindPreviousOne()
+
+	blogInfo := make(map[string]interface{})
+	blogInfo["blog_content"] = blogContent
+	blogInfo["blog_comment"] = blogComment
+	blogInfo["next"] = next
+	blogInfo["previous"] = previous
+
+	res := &utils.Response{Code: 0, Msg: "", Data: blogInfo}
+	res.Json(c)
+}
+
+func UpdateCommentId(c *gin.Context) {
+	var comment service.Comment
+
+	comment_id, id_err := strconv.Atoi(c.Param("id"))
+	comment_status, status_err := strconv.Atoi(c.Query("status"))
+
+	// err := c.BindJSON(&comment)
+	if id_err != nil || status_err != nil {
+		res := &utils.Response{Code: 1000, Msg: "數據格式錯誤"}
+		res.Json(c)
+		return
+	}
+	comment.Id = comment_id
+	comment.Status = comment_status
+	result := comment.UpdateStatus()
+	if result.Error != nil {
+		fmt.Println(result)
+		res := &utils.Response{Code: 1000, Msg: "數據格式錯誤"}
+		res.Json(c)
+		return
+	}
+
+	res := &utils.Response{Code: 0, Msg: ""}
+	res.Json(c)
+}
+
+func PostCommet(c *gin.Context) {
+	var comment service.Comment
+	err := c.BindJSON(&comment)
+	if err != nil {
+		res := &utils.Response{Code: 1000, Msg: "數據格式錯誤"}
+		res.Json(c)
+		return
+	}
+	//IP
+	comment.Ip = c.ClientIP()
+	comment.AddTime = utils.GetDate(utils.DateFormat)
+	comment.Insert()
+
+	blog := &service.Blog{Id: comment.BlogId}
+	fmt.Println(comment)
+	fmt.Println(blog)
+	blog.UpdateReplay()
+	res := &utils.Response{Code: 0, Msg: "success"}
 	res.Json(c)
 }

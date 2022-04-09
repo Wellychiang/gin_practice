@@ -9,7 +9,7 @@ db:
   port: 5432
   db: go_blog
   username: postgres
-  password: jiss
+  password: ji3g4jovul4
   charset: utf8
   # 最大空閒數, 超過空閒時間, db連戒備標記為不可用然後釋放, 設置0為無限制
   maxIdle: 10
