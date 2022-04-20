@@ -3,7 +3,7 @@ import {Navigate} from 'react-router-dom';
 import {login} from '../webAPI'
 
 
-const Login = () =>{
+const Login = (props:{setName:(name:string)=>void}) =>{
     const [username, setName] = useState("")
     const [password, setPassword] = useState("")
     const [redirect, setRedirect] = useState(false)
@@ -15,6 +15,8 @@ const Login = () =>{
             if (data['msg'] === ""){
                 console.log(data)
                 localStorage.setItem('token', data['data'])
+                
+                props.setName('qq')
                 setRedirect(true)
             }
             else{
@@ -22,19 +24,11 @@ const Login = () =>{
                 return data['msg']
             }
         })
-        // const response = await fetch('http://localhost:8080/api/v1/login', {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     // credentials: 'include',
-        //     body: JSON.stringify({
-        //         username: username,
-        //         password: password
-        //     })
-        // }).then((res) => res.json())
 
     }
 
     if (redirect){
+        // TODO: 用 reload 會沒辦法 nav 到 /, 可是不用的話登入不會改變頂部欄位的顯示, 需要手動刷新
         return <Navigate to='/'/>
     }
 

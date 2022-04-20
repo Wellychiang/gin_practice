@@ -1,28 +1,42 @@
-import React, {SyntheticEvent, useState} from 'react';
+import React, {SyntheticEvent, useState, useEffect} from 'react';
 import Redirect from 'react-router-dom';
-import {getTypeList} from '../webAPI'
+import {getTypeList, blogList} from '../webAPI'
 
 const Home = () =>{
     // const [page, setPage] = useState("")
-    // const [size, setSize] = useState("")
+    const [size, setSize] = useState([])
 
-    const submit = async() =>{
-        const typedata = getTypeList('1', '25')
-        console.log(typedata)
-        return typedata
-    }
+
+    useEffect(() =>{
+        blogList().then(da =>{
+            console.log(da.data[0])
+            setSize(da.data)
+        })
+
+    }, [])
+    
 
     if (!localStorage.getItem('token')){
         return (
             <div>
-                not login home page
+                not login page
+                
+                <ul>{
+                    size.map(item=>
+                        <li key={item}>
+                            <div>{item['title']}</div>
+                        </li>
+                    )
+                    }
+                </ul>
             </div>
         )
     }
     else{
         return (
-            <div onSubmit={submit}>
+            <div>
                 login home page
+                {size}
             </div>
         )
     }
