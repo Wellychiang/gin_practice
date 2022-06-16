@@ -1,30 +1,30 @@
 import React, {SyntheticEvent, useState, useEffect} from 'react';
-import Redirect from 'react-router-dom';
-import {getTypeList, blogList} from '../webAPI'
+import Redirect, {Link} from 'react-router-dom';
+import {getTypeList, getBlogList} from '../webAPI'
 
-const Home = () =>{
+const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     // const [page, setPage] = useState("")
-    const [size, setSize] = useState([])
-
+    const [bloglist, setBlogList] = useState([])
 
     useEffect(() =>{
-        blogList().then(da =>{
-            console.log(da.data[0])
-            setSize(da.data)
+        getBlogList().then(data =>{
+            setBlogList(data.data)
         })
 
     }, [])
-    
+
 
     if (!localStorage.getItem('token')){
         return (
             <div>
                 not login page
                 
-                <ul>{
-                    size.map(item=>
+                <ul>
+                    {
+                    bloglist.map(item=>
                         <li key={item}>
-                            <div>{item['title']}</div>
+                            <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                            <nav>點擊次數: {item['clickhit']}</nav>
                         </li>
                     )
                     }
@@ -36,7 +36,16 @@ const Home = () =>{
         return (
             <div>
                 login home page
-                {size}
+                <ul>
+                    {
+                    bloglist.map(item=>
+                        <li key={item}>
+                            <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                            <nav>點擊次數: {item['clickhit']}</nav>
+                        </li>
+                    )
+                    }
+                </ul>
             </div>
         )
     }
