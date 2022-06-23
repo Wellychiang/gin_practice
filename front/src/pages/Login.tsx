@@ -6,6 +6,7 @@ import {login} from '../webAPI'
 const Login = (props:{setName:(name:string)=>void}) =>{
     const [username, setName] = useState("")
     const [password, setPassword] = useState("")
+    const [msg, setMsg] = useState("")
     const [redirect, setRedirect] = useState(false)
 
     const submit = async(e:SyntheticEvent) =>{
@@ -16,12 +17,13 @@ const Login = (props:{setName:(name:string)=>void}) =>{
                 console.log(data)
                 localStorage.setItem('token', data['data'])
                 
-                props.setName('qq')
+                props.setName(username)
                 setRedirect(true)
             }
             else{
                 console.log(data)
-                return data['msg']
+                setMsg(data['msg'])
+                // return data['msg']
             }
         })
 
@@ -44,6 +46,10 @@ const Login = (props:{setName:(name:string)=>void}) =>{
             <input type="password" className="form-control"  placeholder="Password" required
                 onChange={e => setPassword(e.target.value)}
             />
+            
+            {/* {msg && <h2>{msg}</h2>} 目前看起來這行跟下面那行好像沒有差別? */}
+            <h2>{msg}</h2>
+
             <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
         </form>
     )

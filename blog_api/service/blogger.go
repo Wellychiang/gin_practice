@@ -23,10 +23,10 @@ func (blogger *Blogger) Register() *gorm.DB {
 	return db.Db.Table("blogger").Create(blogger).Omit("id")
 }
 
-// 查找blogger
+// 查找blogger(這個是範例?)
 func (blogger *Blogger) Find() (b *Blogger) {
 	b = new(Blogger)
-	db.Db.Where("id = 1").First(b)
+	db.Db.Where("id = ?", blogger.Id).First(b)
 	return
 }
 

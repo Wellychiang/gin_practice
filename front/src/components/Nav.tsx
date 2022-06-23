@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 import {logout} from '../webAPI'
 
-const Nav = () => {
+const Nav = (props:{username:any}) => {
 
     const logout = async() =>{
         await fetch('http://localhost:8080/api/v1/logout', {
@@ -15,6 +15,7 @@ const Nav = () => {
         window.location.reload();
     }
 
+
     if (localStorage.getItem('token') != ''){
         return (
         <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -23,6 +24,9 @@ const Nav = () => {
 
             <div>
                 <ul className="navbar-nav me-auto mb-2 mb-md-0">
+                <li className="nav-item active">
+                    <Link to="/member_center" className="nav-link" >{props.username}</Link>
+                </li>
                 <li className="nav-item active">
                     <Link to="/login" className="nav-link" onClick={logout}>Logout</Link>
                 </li>

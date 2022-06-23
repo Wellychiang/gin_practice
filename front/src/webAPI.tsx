@@ -32,10 +32,12 @@ export const getTypeList = async(page: string, size: string) =>{
 
 export const getBlogList = async() =>{
     return await fetch('http://localhost:8080/api/v1/blog/list?page=1&size=10', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json', 'token': `${localStorage.getItem('token')}`},
+        method: 'GET',
+        headers: {'Content-Type': 'application/json', 'token': `${localStorage.getItem('token')}`},
     }).then((res) => res.json())
 }
+
+
 
 // export const getBlog= async() =>{
 //     return await fetch('http://localhost:8080/api/v1/blog/list?page=1&size=10', {

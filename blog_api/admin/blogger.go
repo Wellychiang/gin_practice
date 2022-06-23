@@ -84,7 +84,7 @@ func Register(c *gin.Context) {
 
 	result := blogger.SearchUser()
 	if result.Username == blogger.Username {
-		res := &utils.Response{Code: 1001, Msg: "Username already used."}
+		res := &utils.Response{Code: 1001, Msg: "Username already used"}
 		res.Json(c)
 		return
 	}
@@ -101,13 +101,19 @@ func Register(c *gin.Context) {
 
 func FindBlogger(c *gin.Context) {
 	var blogger service.Blogger
-	result := blogger.Find()
+	// result := blogger.Find()
+
+	bloggerName := c.Query("username")
+	// err := c.BindJSON(&blogger)
+
+	blogger.Username = bloggerName
+	result := blogger.SearchUser()
 	if result == nil {
 		res := &utils.Response{Code: 1000, Msg: "找不到blogger"}
 		res.Json(c)
 		return
 	}
-	res := &utils.Response{Code: 0, Msg: ""}
+	res := &utils.Response{Code: 0, Msg: "", Data: result}
 	res.Json(c)
 }
 

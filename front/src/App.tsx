@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import Register from './pages/Register'
+import MemberCenter from './pages/memberCenter'
 import Nav from './components/Nav'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav/>
+        <Nav username={name}/>
 
         <main className="form-signin">
             <Routes>
@@ -26,6 +27,7 @@ function App() {
               <Route path="/register" element={<Register/>}/>
 
               <Route path="/blog" element={<Blog blogId={blogId}/>}/>
+              <Route path="/member_center" element={<MemberCenter username={name}/>}/>
             </Routes>
 
         </main>

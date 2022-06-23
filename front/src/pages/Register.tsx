@@ -5,6 +5,7 @@ const Register = () =>{
     const [username, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [msg, setMsg] = useState('');
     const [redirect, setRedirect] = useState(false);
 
     const submit = async (e: SyntheticEvent) =>{
@@ -18,8 +19,16 @@ const Register = () =>{
                 email,
                 password
             })
+        }).then((res) => res.json()).then(data =>{
+            console.log(data)
+            if (data['code'] === 1001){
+                setMsg(data['msg'])
+                return
+            }
+            else{
+                setRedirect(true);
+            }
         })
-        setRedirect(true);
     }
     if (redirect){
         return <Navigate to='/login'/>
@@ -38,6 +47,7 @@ const Register = () =>{
             <input type="password" className="form-control"  placeholder="Password" required
                 onChange={e => setPassword(e.target.value)}
             />
+            <h2>{msg}</h2>
             <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
         </form>
     )
