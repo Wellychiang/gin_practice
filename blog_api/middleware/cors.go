@@ -12,6 +12,7 @@ func Cors() gin.HandlerFunc {
 
 		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Header("Access-Control-Allow-Headers", "*")
+		c.Header("Access-Control-Allow-Methods", "*")
 
 		// 放行所有 OPTIONS 方法
 		if method == "OPTIONS" {

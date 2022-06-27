@@ -70,9 +70,10 @@ func FindBlog(c *gin.Context) {
 	}
 	blog.Id = blogId
 
+	fmt.Printf("blog: %+v", blog)
 	blog.UpdateClick()
+	fmt.Printf("%+v", blog)
 	blogContent := blog.FindBlogContent()
-	fmt.Printf("Print content: %v", blogContent)
 	blogComment := blog.FindCommentByBlog()
 	next := blog.FindNextOne()
 	previous := blog.FindPreviousOne()

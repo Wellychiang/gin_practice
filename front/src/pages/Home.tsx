@@ -9,6 +9,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     useEffect(() =>{
         getBlogList().then(data =>{
             setBlogList(data.data)
+            console.log(bloglist)
         })
 
     }, [])

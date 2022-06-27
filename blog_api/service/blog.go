@@ -11,52 +11,87 @@ import (
 
 type Blog entity.Blog
 
+type BlogContent struct {
+	Id         int    `gorm:"column:id"json:"id"`
+	Title      string `gorm:"column:title"json:"title"`
+	TypeId     int    `gorm:"column:typeid"json:"typeid"` //關聯 blogType id
+	Content    string `gorm:"column:content"json:"content"`
+	Summary    string `gorm:"column:summary"json:"summary"`
+	ClickHit   int    `gorm:"column:clickhit"json:"clickhit"`
+	ReplayHit  int    `gorm:"column:replayhit"json:"replayhit"`
+	AddTime    string `gorm:"column:addtime"json:"addtime"`
+	UpdateTime string `gorm:"column:updatetime"json:"updatetime"`
+	TypeName   string `gorm:"-"json:"typename"` // - 等於可以忽略這字段沒關係
+	BloggerId  string `gorm:"column:bloggerid"json:"bloggerid"`
+	Blogger    string `gorm:"column:blogger"json:"blogger"`
+}
+
+type BlogComment struct {
+	Id        int    `json:"id"`
+	Ip        string `json:"ip"`
+	Content   string `json:"content"`
+	BlogId    int    `json:"blogid"`
+	Status    int    `json:"status"`
+	AddTime   string `json:"addtime"`
+	BlogTitle string `json:"blogtitle"`
+	BloggerId int    `json:"bloggerid"`
+	NickName  string `json:"nickname"`
+}
+
 func (Blog) TableName() string {
 	return "blog"
 }
 
-func (blog *Blog) FindBlogContent() (b *Blog) {
-	b = new(Blog)
+func (blog *Blog) FindBlogContent() (b *BlogContent) {
 
-	fmt.Println(blog.Id)
-	db.Db.Table("blog b").Select("b.*, bt.id as type_name").
+	// (O)TODO: 要在這邊做一個可以 return 撈出來資料的 struct, 撈出來的資料欄位在要乘載的新 struct 都要有才能成功撈出來
+
+	b = new(BlogContent)
+
+	// fmt.Println(blog.Id)
+	db.Db.Table("blog b").Select("b.*, bt.id as type_name, ber.username as blogger").
 		Joins("left join blogType bt on b.typeid = bt.id").
+		Joins("left join blogger ber on b.bloggerid = ber.id").
 		Where("b.id = ?", blog.Id).Order("bt.sort asc").Find(b)
 
-	fmt.Println(Blog{})
-	fmt.Println(*blog)
-	fmt.Println(b)
-	fmt.Println(b.Id)
-	fmt.Println(&b)
-	fmt.Println(*b)
+	fmt.Printf("%+v", b)
+	// fmt.Println(Blog{})
+	// fmt.Println(*blog)
+	// fmt.Println(b)
+	// fmt.Println(b.Id)
+	// fmt.Println(&b)
+	// fmt.Println(*b)
 
 	return
 }
 
-// func (blog *Blog) FindBlogContent() Blog {
-// 	var b Blog
-// 	db.Db.Table("blog b").Select("b.*, bt.id as type_name").
-// 		Joins("left join blogType bt on b.typeid = bt.id").
-// 		Where("b.id = ?", blog.Id).Order("bt.sort asc").Find(&b)
+func (blog *Blog) FindCommentByBlog() []BlogComment {
 
-// 	fmt.Println(b)
-// 	fmt.Println(&b)
-// 	return b
-// }
+	c := make([]BlogComment, 0)
 
-func (blog *Blog) FindCommentByBlog() []Comment {
-	comments := make([]Comment, 0)
-	result := db.Db.Table("comment").
-		Where("blogid = ? and status = 1", blog.Id).
-		Order("addtime asc").
-		Find(&comments)
+	db.Db.Table("comment c").Select("c.*, ber.nickname as nickname").
+		Joins("left join blogger ber on c.bloggerid = ber.id").
+		Where("c.blogid = ? and c.status = 1", blog.Id).
+		Order("addtime asc").Find(&c)
 
-	if result.Error != nil {
-		return nil
-	}
+	fmt.Println(c)
 
-	return comments
+	return c
 }
+
+// func (blog *Blog) FindCommentByBlog() []Comment {
+// 	comments := make([]Comment, 0)
+// 	result := db.Db.Table("comment").
+// 		Where("blogid = ? and status = 1", blog.Id).
+// 		Order("addtime asc").
+// 		Find(&comments)
+
+// 	if result.Error != nil {
+// 		return nil
+// 	}
+
+// 	return comments
+// }
 
 func (blog *Blog) FindNextOne() (b *Blog) {
 	b = new(Blog)

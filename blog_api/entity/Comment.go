@@ -8,4 +8,5 @@ type Comment struct {
 	Status    int    `gorm:"column:status"json:"status"`
 	AddTime   string `gorm:"column:addtime"json:"addtime"`
 	BlogTitle string `gorm:"column:blogtitle"json:"blogtitle"`
+	BloggerId int    `gorm:"column:bloggerid"json:"bloggerid"`
 }
