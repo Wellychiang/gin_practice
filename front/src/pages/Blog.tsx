@@ -22,8 +22,13 @@ const Blog = (props: {blogId: any}) =>{
             setBlogTitle(data.data.blog_content.title)
             setBlogContent(data.data.blog_content.content)
             setBlogClickhit(data.data.blog_content.clickhit)
-            setBlogNextId(data.data.next.id)
-            setBlogPreviousId(data.data.previous.id)
+
+            if (data.data.next){
+                setBlogNextId(data.data.next.id)
+            }
+            if (data.data.previous){
+                setBlogPreviousId(data.data.previous.id)
+            }
 
             setBlogComment(data.data.blog_comment)
         })
@@ -90,24 +95,25 @@ const Blog = (props: {blogId: any}) =>{
             <div className="clickhit">Click count: {blogClickhit}</div>
             {/* <Link to="/blog">Next</Link> */}
             {/* 目前卡在 無法點擊 next 刷新同一頁面 */}
+
+
+            {/* TODO:  <button onClick={() => }>Reply</button> */}
             <br></br>
             <br></br>
-            <br></br>
-            <div>Comment:</div>
-            <ol>
+
+            {/* <div>Comment:</div> */}
+            <ul>
                 {
                 blogComment.map(item=>
-                    <li key={item}>
-                        <div>Comment title: {item['blogtitle']}</div>
-                        <div>Comment content: {item['content']}</div>
+                    <li key={item} className="comment">
+                        <div className="comment_nickname">Nickname: {item['nickname']}</div>
+                        <div className="comment_content">Content: {item['content']}</div>
                     </li>
                 )
                 }
-            </ol>
+            </ul>
             <button onClick={() => nextBlogContent(blogNextId)}>Next</button><button onClick={() => previousBlogContent(blogPreviousId)}>Previous</button>
-
-
-
+            <br></br>
 
         </div>
     )

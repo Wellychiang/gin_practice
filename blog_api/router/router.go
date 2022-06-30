@@ -36,7 +36,7 @@ func register(router *gin.Engine) {
 	v1.GET("/blog/list", api.BlogListWtihType)
 	v1.GET("/blog", api.FindBlog)
 	v1.PUT("/blog/:id", api.UpdateCommentId)
-	v1.POST("/blog/comment", api.PostCommet)
+	v1.POST("/blog/comment", api.PostComment)
 
 	// back
 	v1.POST("/login", admin.Login)
@@ -47,6 +47,7 @@ func register(router *gin.Engine) {
 	jwt.GET("/blogger", admin.FindBlogger)
 	jwt.PUT("/info", admin.BloggerUpdateInfo) //目前更改 put post 之類的到這
 	jwt.PUT("/info/password", admin.BloggerUpdatePassword)
+	jwt.POST("/blog", admin.PostBlog)
 	jwt.POST("/type/list", admin.TypeList)
 	jwt.POST("/type/save", admin.CreateType)
 	jwt.POST("/type/delete", admin.DeleteType)

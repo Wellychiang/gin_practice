@@ -12,6 +12,7 @@ import (
 type Blog entity.Blog
 
 type BlogContent struct {
+	// 要乘載撈出來的資料就需要一個像這個完整的 struct, 連 gorm tag 都要有
 	Id         int    `gorm:"column:id"json:"id"`
 	Title      string `gorm:"column:title"json:"title"`
 	TypeId     int    `gorm:"column:typeid"json:"typeid"` //關聯 blogType id
@@ -27,15 +28,16 @@ type BlogContent struct {
 }
 
 type BlogComment struct {
-	Id        int    `json:"id"`
-	Ip        string `json:"ip"`
-	Content   string `json:"content"`
-	BlogId    int    `json:"blogid"`
-	Status    int    `json:"status"`
-	AddTime   string `json:"addtime"`
-	BlogTitle string `json:"blogtitle"`
-	BloggerId int    `json:"bloggerid"`
-	NickName  string `json:"nickname"`
+	// 要乘載撈出來的資料就需要一個像這個完整的 struct, 連 gorm tag 都要有
+	Id        int    `gorm:"column:id"json:"id"`
+	Ip        string `gorm:"column:ip"json:"ip"`
+	Content   string `gorm:"column:content"json:"content"`
+	BlogId    int    `gorm:"column:blogid"json:"blogid"`
+	Status    int    `gorm:"column:status"json:"status"`
+	AddTime   string `gorm:"column:addtime"json:"addtime"`
+	BlogTitle string `gorm:"column:blogtitle"json:"blogtitle"`
+	BloggerId int    `gorm:"column:bloggerid"json:"bloggerid"`
+	NickName  string `gorm:"column:nickname"json:"nickname"`
 }
 
 func (Blog) TableName() string {
@@ -43,8 +45,6 @@ func (Blog) TableName() string {
 }
 
 func (blog *Blog) FindBlogContent() (b *BlogContent) {
-
-	// (O)TODO: 要在這邊做一個可以 return 撈出來資料的 struct, 撈出來的資料欄位在要乘載的新 struct 都要有才能成功撈出來
 
 	b = new(BlogContent)
 
@@ -133,6 +133,10 @@ func (blog *Blog) FindList(page *utils.Page) ([]*Blog, error) {
 func (blog *Blog) Count() (count int64) {
 	db.Db.Model(blog).Count(&count)
 	return
+}
+
+func (blog *Blog) Insert() *gorm.DB {
+	return db.Db.Create(blog).Omit("id")
 }
 
 func (blog *Blog) UpdateClick() *gorm.DB {

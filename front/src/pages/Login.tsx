@@ -3,7 +3,7 @@ import {Navigate} from 'react-router-dom';
 import {login} from '../webAPI'
 
 
-const Login = (props:{setName:(name:string)=>void}) =>{
+const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:string)=>void}) =>{
     const [username, setName] = useState("")
     const [password, setPassword] = useState("")
     const [msg, setMsg] = useState("")
@@ -15,9 +15,10 @@ const Login = (props:{setName:(name:string)=>void}) =>{
         login(username, password).then(data =>{
             if (data['msg'] === ""){
                 console.log(data)
-                localStorage.setItem('token', data['data'])
+                localStorage.setItem('token', data['token'])
                 
                 props.setName(username)
+                props.setBloggerId(data['userid'])
                 setRedirect(true)
             }
             else{
@@ -30,7 +31,7 @@ const Login = (props:{setName:(name:string)=>void}) =>{
     }
 
     if (redirect){
-        // TODO: 用 reload 會沒辦法 nav 到 /, 可是不用的話登入不會改變頂部欄位的顯示, 需要手動刷新
+        // TODO: 用 reload 會沒辦法 nav 到 /
         return <Navigate to='/'/>
     }
 

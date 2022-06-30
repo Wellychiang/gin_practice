@@ -37,6 +37,10 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
         return (
             <div>
                 login home page
+                <br></br>
+
+                {/* TODO: 轉到 post blog page, 才 post */}
+                <Link to="postblog">Post</Link>
                 <ul>
                     {
                     bloglist.map(item=>

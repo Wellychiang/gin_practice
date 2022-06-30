@@ -114,7 +114,7 @@ func UpdateCommentId(c *gin.Context) {
 	res.Json(c)
 }
 
-func PostCommet(c *gin.Context) {
+func PostComment(c *gin.Context) {
 	var comment service.Comment
 	err := c.BindJSON(&comment)
 	if err != nil {
