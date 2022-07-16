@@ -11,5 +11,5 @@ type Blog struct {
 	AddTime    string `gorm:"column:addtime"json:"addtime"`
 	UpdateTime string `gorm:"column:updatetime"json:"updatetime"`
 	TypeName   string `gorm:"-"json:"typename"` // - 等於可以忽略這字段沒關係
-	BloggerId  string `gorm:"column:bloggerid"json:"bloggerid"`
+	BloggerId  int    `gorm:"column:bloggerid"json:"bloggerid"`
 }

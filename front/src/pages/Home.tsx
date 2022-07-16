@@ -40,7 +40,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
                 <br></br>
 
                 {/* TODO: 轉到 post blog page, 才 post */}
-                <Link to="postblog">Post</Link>
+                <Link to="/postblog">Post</Link>
                 <ul>
                     {
                     bloglist.map(item=>

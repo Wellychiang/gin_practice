@@ -3,7 +3,7 @@ import {Navigate} from 'react-router-dom';
 import {login} from '../webAPI'
 
 
-const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:string)=>void}) =>{
+const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:any)=>void}) =>{
     const [username, setName] = useState("")
     const [password, setPassword] = useState("")
     const [msg, setMsg] = useState("")
@@ -18,7 +18,7 @@ const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:strin
                 localStorage.setItem('token', data['token'])
                 
                 props.setName(username)
-                props.setBloggerId(data['userid'])
+                props.setBloggerId(data['data']['userid'])
                 setRedirect(true)
             }
             else{

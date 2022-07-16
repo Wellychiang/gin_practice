@@ -3,6 +3,7 @@ package admin
 import (
 	"api/service"
 	"api/utils"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,7 @@ import (
 func PostBlog(c *gin.Context) {
 	var blog service.Blog
 	err := c.BindJSON(&blog)
+	fmt.Printf("blog: %+v", blog)
 	if err != nil {
 		res := &utils.Response{Code: 1000, Msg: "數據格式錯誤"}
 		res.Json(c)

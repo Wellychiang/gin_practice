@@ -17,17 +17,19 @@ const PostBlog = (props: {bloggerid: any}) =>{
 
     // }, [])
 
-    const submit = async() =>{
+    const submitt = async(e:SyntheticEvent) =>{
+        e.preventDefault();
+        console.log('bloggerid: ', props.bloggerid)
 
-        return await fetch('http://localhost:8080/api/v1/admin/blog', {
+        await fetch('http://localhost:8080/api/v1/admin/blog', {
             method: 'POST',
             headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
             body: JSON.stringify({
                 title: title,
                 content: content,
                 bloggerid: props.bloggerid,
-                addtime: Date.now(),
-                updatetime: Date.now()
+                addtime: new Date(Date.now()),
+                updatetime: new Date(Date.now())
             })
         }).then( res => res.json()).then(data =>{
             if (data['msg'] === ''){
@@ -38,16 +40,16 @@ const PostBlog = (props: {bloggerid: any}) =>{
     }
 
     if (redirect){
-        return <Navigate to="/home"/>
+        return <Navigate to="/"/>
     }
 
 
     return (
         // 現在到這, 還沒完成
-        <form onSubmit={submit}>
-          <h1 className="h3 mb-3 fw-normal">Please register</h1>
+        <form onSubmit={submitt}>
+          <h1 className="h3 mb-3 fw-normal">blog info</h1>
 
-            <input type="email" className="form-control"  placeholder="blog title" required
+            <input type="title" className="form-control"  placeholder="blog title" required
                 onChange={e => setTitle(e.target.value)}
             />
             <input type="content" className="form-control"  placeholder="blog content" required

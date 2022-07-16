@@ -52,7 +52,7 @@ func Login(c *gin.Context) {
 	utils.Cache.Set(tokenKey, token, cache.DefaultExpiration)
 
 	data := make(map[string]interface{})
-	data["userid"] = blogger.Id
+	data["userid"] = result.Id
 	res := &utils.Response{Code: 0, Msg: "", Data: data, Token: tokenKey}
 	res.Json(c)
 }

@@ -136,7 +136,7 @@ func (blog *Blog) Count() (count int64) {
 }
 
 func (blog *Blog) Insert() *gorm.DB {
-	return db.Db.Create(blog).Omit("id")
+	return db.Db.Create(blog)
 }
 
 func (blog *Blog) UpdateClick() *gorm.DB {
