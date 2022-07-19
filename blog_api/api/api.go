@@ -125,6 +125,7 @@ func PostComment(c *gin.Context) {
 	//IP
 	comment.Ip = c.ClientIP()
 	comment.AddTime = utils.GetDate(utils.DateFormat)
+	comment.Status = 1
 	comment.Insert()
 
 	blog := &service.Blog{Id: comment.BlogId}

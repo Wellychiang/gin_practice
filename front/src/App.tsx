@@ -28,7 +28,7 @@ function App() {
               <Route path="/login" element={<Login setName={setName} setBloggerId={setBloggerId}/>}/>
               <Route path="/register" element={<Register/>}/>
 
-              <Route path="/blog" element={<Blog blogId={blogId}/>}/>
+              <Route path="/blog" element={<Blog blogId={blogId} bloggerId={bloggerId}/>}/>
               <Route path="/postblog" element={<PostBlog bloggerid={bloggerId}/>}/>
               <Route path="/member_center" element={<MemberCenter username={name}/>}/>
             </Routes>

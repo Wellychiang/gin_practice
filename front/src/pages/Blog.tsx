@@ -1,10 +1,12 @@
 import React, {SyntheticEvent, useState, useEffect} from 'react';
 import Redirect, {Link} from 'react-router-dom';
+import { json } from 'stream/consumers';
 import { resolveModuleNameFromCache } from 'typescript';
 import {getTypeList, } from '../webAPI'
 
 
-const Blog = (props: {blogId: any}) =>{
+const Blog = (props: {blogId: any, bloggerId: any}) =>{
+    const [blogId, setBlogId] = useState('')
     const [blogCreator, setBlogCreator] = useState('')
     const [blogTitle, setBlogTitle] = useState('')
     const [blogContent, setBlogContent] = useState('')
@@ -13,11 +15,14 @@ const Blog = (props: {blogId: any}) =>{
     const [blogPreviousId, setBlogPreviousId] = useState('')
     const [blogComment, setBlogComment] = useState([])
 
+    const [comment, setUploadComment] = useState('')
+
     useEffect(() =>{
         getBlogContent(props.blogId).then(data =>{
             // setBlogList(data)
             // console.log(data.data.next.id)
             // console.log(data.data.previous.id)
+            setBlogId(props.blogId)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
             setBlogContent(data.data.blog_content.content)
@@ -47,6 +52,7 @@ const Blog = (props: {blogId: any}) =>{
             // setBlogList(data)
             // console.log(data.data.next.id)
             // console.log(data.data.previous.id)
+            setBlogId(blogId)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
             setBlogContent(data.data.blog_content.content)
@@ -69,6 +75,7 @@ const Blog = (props: {blogId: any}) =>{
             // setBlogList(data)
             // console.log(data.data.next.id)
             // console.log(data.data.previous.id)
+            setBlogId(blogId)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
             setBlogContent(data.data.blog_content.content)
@@ -85,7 +92,20 @@ const Blog = (props: {blogId: any}) =>{
             }
         })
     }
+    const uploadComment = async(e: SyntheticEvent) =>{
+        e.preventDefault()
 
+        return await fetch('http://localhost:8080/api/v1/admin/blog/comment', {
+            method: 'POST',
+            headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
+            body: JSON.stringify({
+                bloggerid: props.bloggerId,
+                blogid: blogId,
+                addtime: new Date(Date.now()),
+                content: comment
+            })
+        })
+    }
 
     return (
         <div>
@@ -101,7 +121,10 @@ const Blog = (props: {blogId: any}) =>{
             <br></br>
             <br></br>
 
-            {/* <div>Comment:</div> */}
+            <div>{blogComment.length} comment</div>
+            <form onSubmit={uploadComment}>
+                <input placeholder="add comment" required onChange={e => setUploadComment(e.target.value)}></input><button>add</button>
+            </form>
             <ul>
                 {
                 blogComment.map(item=>
