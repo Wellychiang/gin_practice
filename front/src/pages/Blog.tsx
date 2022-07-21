@@ -18,11 +18,20 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     const [comment, setUploadComment] = useState('')
 
     useEffect(() =>{
-        getBlogContent(props.blogId).then(data =>{
-            // setBlogList(data)
-            // console.log(data.data.next.id)
-            // console.log(data.data.previous.id)
-            setBlogId(props.blogId)
+
+        var storageBlogId = Number(localStorage.getItem('blogId'))
+        var storageBloggerId = Number(localStorage.getItem('bloggerId'))
+        if (!storageBlogId){
+            storageBlogId = props.blogId
+        }
+        if (!storageBloggerId){
+            storageBloggerId = props.bloggerId
+        } 
+
+        getBlogContent(storageBlogId).then(data =>{
+            localStorage.setItem('blogId', String(storageBlogId))
+            localStorage.setItem('bloggerId', String(storageBloggerId))
+            setBlogId(`${storageBlogId}`)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
             setBlogContent(data.data.blog_content.content)
@@ -49,9 +58,9 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     }
     const nextBlogContent= async(blogId: any) =>{
         getBlogContent(blogId).then(data =>{
-            // setBlogList(data)
-            // console.log(data.data.next.id)
-            // console.log(data.data.previous.id)
+
+            localStorage.setItem('blogId', String(blogId))
+
             setBlogId(blogId)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
@@ -72,9 +81,8 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     }
     const previousBlogContent= async(blogId: any) =>{
         getBlogContent(blogId).then(data =>{
-            // setBlogList(data)
-            // console.log(data.data.next.id)
-            // console.log(data.data.previous.id)
+            localStorage.setItem('blogId', String(blogId))
+
             setBlogId(blogId)
             setBlogCreator(data.data.blog_content.blogger)
             setBlogTitle(data.data.blog_content.title)
@@ -95,16 +103,17 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     const uploadComment = async(e: SyntheticEvent) =>{
         e.preventDefault()
 
-        return await fetch('http://localhost:8080/api/v1/admin/blog/comment', {
+        await fetch('http://localhost:8080/api/v1/admin/blog/comment', {
             method: 'POST',
             headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
             body: JSON.stringify({
-                bloggerid: props.bloggerId,
-                blogid: blogId,
+                bloggerid: Number(localStorage.getItem('bloggerId')),
+                blogid: Number(blogId),
                 addtime: new Date(Date.now()),
                 content: comment
             })
         })
+        window.location.reload()
     }
 
     return (
