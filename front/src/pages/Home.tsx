@@ -17,20 +17,19 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
 
     if (!localStorage.getItem('token')){
         return (
-            <div>
-                not login page
-                
+            <div className="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <ul>
                     {
-                    bloglist.map(item=>
-                        <li key={item}>
-                            <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
-                            <nav>點擊次數: {item['clickhit']}</nav>
-                        </li>
-                    )
+                        bloglist.map(item=>
+                            <label className="list-group-item rounded-3 py-3" key={item}>
+                                <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                                <nav>點擊次數: {item['clickhit']}</nav>
+                            </label>
+                        )
                     }
                 </ul>
             </div>
+
         )
     }
     else{
