@@ -38,20 +38,21 @@ const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:any)=
 
     return (
         <form onSubmit={submit}>
-          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
             {/* <input type="email" className="form-control"  placeholder="name@example.com" required/> */}
-            <input type="username" className="form-control"  placeholder="username" required
-                onChange={e => setName(e.target.value)}
-            />
-            <input type="password" className="form-control"  placeholder="Password" required
-                onChange={e => setPassword(e.target.value)}
-            />
+            <div>Username</div>
+            <input type="username" className="form-control"  placeholder="input username" required
+                onChange={e => setName(e.target.value)}/>
+            <br></br>
+            <div>Password</div>
+            <input type="password" className="form-control"  placeholder="input password" required
+                onChange={e => setPassword(e.target.value)}/>
             
             {/* {msg && <h2>{msg}</h2>} 目前看起來這行跟下面那行好像沒有差別? */}
             <h2>{msg}</h2>
 
-            <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <br></br>
+            <button className="w-100 btn btn-lg btn-primary" type="submit">Login</button>
         </form>
     )
 }

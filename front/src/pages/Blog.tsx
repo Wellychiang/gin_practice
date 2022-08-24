@@ -1,5 +1,5 @@
 import React, {SyntheticEvent, useState, useEffect} from 'react';
-import Redirect, {Link} from 'react-router-dom';
+import Redirect, {Link, Navigate} from 'react-router-dom';
 import { json } from 'stream/consumers';
 import { resolveModuleNameFromCache } from 'typescript';
 import {getTypeList, } from '../webAPI'
@@ -16,6 +16,8 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     const [blogComment, setBlogComment] = useState([])
 
     const [comment, setUploadComment] = useState('')
+
+    const [redirect, setRedirect] = useState(false)
 
     useEffect(() =>{
 
@@ -103,21 +105,33 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     const uploadComment = async(e: SyntheticEvent) =>{
         e.preventDefault()
 
-        await fetch('http://localhost:8080/api/v1/admin/blog/comment', {
-            method: 'POST',
-            headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
-            body: JSON.stringify({
-                bloggerid: Number(localStorage.getItem('bloggerId')),
-                blogid: Number(blogId),
-                addtime: new Date(Date.now()),
-                content: comment
+        console.log('im trying')
+        if (!localStorage.getItem('token')){
+            setRedirect(true)
+        }
+        else{
+            await fetch('http://localhost:8080/api/v1/admin/blog/comment', {
+                method: 'POST',
+                headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
+                body: JSON.stringify({
+                    bloggerid: Number(localStorage.getItem('bloggerId')),
+                    blogid: Number(blogId),
+                    addtime: new Date(Date.now()),
+                    content: comment
+                })
             })
-        })
         window.location.reload()
+        }
+    }
+
+    if (redirect){
+        return <Navigate to='/login'/>
     }
 
     return (
         <div>
+
+
             <div className="creator">Creator: {blogCreator}</div>
             <div className="title">Title: {blogTitle}</div>
             <div className="blogContent">Content: {blogContent}</div>
@@ -137,10 +151,11 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
             <ul>
                 {
                 blogComment.map(item=>
-                    <li key={item} className="comment">
+                    <label className="list-group-item rounded-3 py-3" key={item}>
+
                         <div className="comment_nickname">Nickname: {item['nickname']}</div>
                         <div className="comment_content">Content: {item['content']}</div>
-                    </li>
+                    </label>
                 )
                 }
             </ul>
