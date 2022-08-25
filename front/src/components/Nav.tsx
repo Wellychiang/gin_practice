@@ -1,9 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 import {logout} from '../webAPI'
 
 const Nav = (props:{username:any}) => {
+
+    // const [username, setUsername] = useState('')
+
+    // setUsername(props.username)
+    if (!localStorage.getItem('username')){
+        localStorage.setItem('username', props.username)
+    }
+    
 
     const logout = async() =>{
         await fetch('http://localhost:8080/api/v1/logout', {
@@ -25,7 +33,7 @@ const Nav = (props:{username:any}) => {
             <div>
                 <ul className="navbar-nav me-auto mb-2 mb-md-0">
                 <li className="nav-item active">
-                    <Link to="/member_center" className="nav-link" >{props.username}</Link>
+                    <Link to="/member_center" className="nav-link" >{localStorage.getItem('username')}</Link>
                 </li>
                 <li className="nav-item active">
                     <Link to="/login" className="nav-link" onClick={logout}>Logout</Link>

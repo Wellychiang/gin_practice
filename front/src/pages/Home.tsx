@@ -15,6 +15,11 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     }, [])
 
 
+    if (!bloglist){
+        return (
+            <div>they're no any blog right now.</div>
+        )
+    }
     if (!localStorage.getItem('token')){
         return (
             <div className="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
@@ -23,7 +28,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
                         bloglist.map(item=>
                             <label className="list-group-item rounded-3 py-3" key={item}>
                                 <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
-                                <nav>點擊次數: {item['clickhit']}</nav>
+                                <nav>Click count: {item['clickhit']}</nav>
                             </label>
                         )
                     }
@@ -45,7 +50,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
                     bloglist.map(item=>
                         <li key={item}>
                             <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
-                            <nav>點擊次數: {item['clickhit']}</nav>
+                            <nav>Click count: {item['clickhit']}</nav>
                         </li>
                     )
                     }

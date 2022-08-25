@@ -129,19 +129,18 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
     }
 
     return (
+
+
+
         <div>
 
+          <div className="blog-post">
+            <h2 className="blog-post-title">{blogTitle}</h2>
+            <p className="blog-post-meta">by <a href="#">{blogCreator}</a></p>
 
-            <div className="creator">Creator: {blogCreator}</div>
-            <div className="title">Title: {blogTitle}</div>
-            <div className="blogContent">Content: {blogContent}</div>
-            <div className="clickhit">Click count: {blogClickhit}</div>
-            {/* <Link to="/blog">Next</Link> */}
-            {/* 目前卡在 無法點擊 next 刷新同一頁面 */}
+            <p>{blogContent}</p>
 
-
-            {/* TODO:  <button onClick={() => }>Reply</button> */}
-            <br></br>
+        </div>
             <br></br>
 
             <div>{blogComment.length} comment</div>
@@ -151,11 +150,12 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
             <ul>
                 {
                 blogComment.map(item=>
-                    <label className="list-group-item rounded-3 py-3" key={item}>
 
-                        <div className="comment_nickname">Nickname: {item['nickname']}</div>
-                        <div className="comment_content">Content: {item['content']}</div>
-                    </label>
+                    <a key={item}>
+                        <div className="comment_nickname"> <a href="#">{item['nickname']}</a></div>
+                        <div className="comment_content">{item['content']}</div>
+                        <hr></hr>
+                    </a>
                 )
                 }
             </ul>
