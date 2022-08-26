@@ -9,6 +9,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     useEffect(() =>{
         getBlogList().then(data =>{
             setBlogList(data.data)
+            localStorage.setItem('blogId', '')
             console.log(bloglist)
         })
 
@@ -23,38 +24,33 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     if (!localStorage.getItem('token')){
         return (
             <div className="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
-                <ul>
-                    {
-                        bloglist.map(item=>
-                            <label className="list-group-item rounded-3 py-3" key={item}>
-                                <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
-                                <nav>Click count: {item['clickhit']}</nav>
-                            </label>
-                        )
-                    }
-                </ul>
+                {
+                    bloglist.map(item=>
+                        <label className="list-group-item rounded-3 py-3" key={item}>
+                            <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                            <nav>Click count: {item['clickhit']}</nav>
+                        </label>
+                    )
+                }
             </div>
 
         )
     }
     else{
         return (
-            <div>
-                login home page
-                <br></br>
-
-                {/* TODO: 轉到 post blog page, 才 post */}
+            // <div>
+            <div className="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
                 <Link to="/postblog">Post</Link>
-                <ul>
+                {/* <ul> */}
                     {
                     bloglist.map(item=>
-                        <li key={item}>
+                        <label className="list-group-item rounded-3 py-3" key={item}>
                             <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
                             <nav>Click count: {item['clickhit']}</nav>
-                        </li>
+                        </label>
                     )
                     }
-                </ul>
+                {/* </ul> */}
             </div>
         )
     }

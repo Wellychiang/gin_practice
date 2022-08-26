@@ -5,9 +5,6 @@ import {logout} from '../webAPI'
 
 const Nav = (props:{username:any}) => {
 
-    // const [username, setUsername] = useState('')
-
-    // setUsername(props.username)
     if (!localStorage.getItem('username')){
         localStorage.setItem('username', props.username)
     }

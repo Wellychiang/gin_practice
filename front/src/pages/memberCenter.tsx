@@ -1,5 +1,5 @@
 import React, {SyntheticEvent, useState, useEffect} from 'react';
-import Redirect, {Link} from 'react-router-dom';
+import Redirect, {Link, Navigate} from 'react-router-dom';
 import { json } from 'stream/consumers';
 
 const MemberCenter = (props:{username: string}) =>{
@@ -8,8 +8,11 @@ const MemberCenter = (props:{username: string}) =>{
     const [profile, setProfile] = useState('')
     const [sign, setSign] = useState('')
 
+    const [redirect, setRedirect] = useState(false)
+
+
     useEffect(() =>{
-        getBloggerInfo(props.username).then(data =>{
+        getBloggerInfo(localStorage.getItem('username')).then(data =>{
             console.log(data)
             setUserName(data.data.username)
             setNickName(data.data.nickname)
@@ -41,16 +44,15 @@ const MemberCenter = (props:{username: string}) =>{
                 profile: profile,
                 sign: sign
             })
-        }).then((res) => res.json())
+        }).then((res) => res.json()).then(data =>{
+            console.log(data)
+            setRedirect(true)
+        })
     }
-    // return (
-    //     <div>
-    //         <div>Username: {username}</div>
-    //         <div>Nick name: {nickName}</div>
-    //         <div>Profile: {profile}</div>
-    //         <div>Sign: {sign}</div>
-    //     </div>
-    // )
+
+    if (redirect){
+        return <Navigate to='/'/>
+    }
 
     return (
         <form onSubmit={submit}>

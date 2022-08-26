@@ -2,41 +2,36 @@ import React, {SyntheticEvent, useState, useEffect} from 'react';
 import {Navigate} from 'react-router-dom';
 import {getTypeList, getBlogList} from '../webAPI'
 
-const PostBlog = (props: {bloggerid: any}) =>{
+const PostBlog = () =>{
     // const [page, setPage] = useState("")
     const [bloglist, setBlogList] = useState([])
     const [content, setContent] = useState('')
     const [title, setTitle] = useState('')
     const [redirect, setRedirect] = useState(false)
 
-    // useEffect(() =>{
-    //     getBlogList().then(data =>{
-    //         setBlogList(data.data)
-    //         console.log(bloglist)
-    //     })
 
-    // }, [])
 
     const submitt = async(e:SyntheticEvent) =>{
         e.preventDefault();
-        console.log('bloggerid: ', props.bloggerid)
 
-        await fetch('http://localhost:8080/api/v1/admin/blog', {
-            method: 'POST',
-            headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
-            body: JSON.stringify({
-                title: title,
-                content: content,
-                bloggerid: props.bloggerid,
-                addtime: new Date(Date.now()),
-                updatetime: new Date(Date.now())
+        if (localStorage.getItem('bloggerId')){
+            await fetch('http://localhost:8080/api/v1/admin/blog', {
+                method: 'POST',
+                headers: {'content-type': 'application/json', 'token': `${localStorage.getItem('token')}`},
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    bloggerid: Number(localStorage.getItem('bloggerId')),
+                    addtime: new Date(Date.now()),
+                    updatetime: new Date(Date.now())
+                })
+            }).then( res => res.json()).then(data =>{
+                if (data['msg'] === ''){
+                    console.log(data)
+                    setRedirect(true)
+                }
             })
-        }).then( res => res.json()).then(data =>{
-            if (data['msg'] === ''){
-                console.log(data)
-                setRedirect(true)
-            }
-        })
+        }
     }
 
     if (redirect){

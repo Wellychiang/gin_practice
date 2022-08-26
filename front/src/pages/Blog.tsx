@@ -147,7 +147,6 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
             <form onSubmit={uploadComment}>
                 <input placeholder="add comment" required onChange={e => setUploadComment(e.target.value)}></input><button>add</button>
             </form>
-            <ul>
                 {
                 blogComment.map(item=>
 
@@ -158,7 +157,6 @@ const Blog = (props: {blogId: any, bloggerId: any}) =>{
                     </a>
                 )
                 }
-            </ul>
             <button onClick={() => nextBlogContent(blogNextId)}>Next</button><button onClick={() => previousBlogContent(blogPreviousId)}>Previous</button>
             <br></br>
 

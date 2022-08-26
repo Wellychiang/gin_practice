@@ -19,6 +19,7 @@ const Login = (props:{setName:(name:string)=>void, setBloggerId:(bloggerId:any)=
                 
                 props.setName(username)
                 props.setBloggerId(data['data']['userid'])
+                localStorage.setItem('bloggerId', data['data']['userid'])
                 setRedirect(true)
             }
             else{
