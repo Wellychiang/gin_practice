@@ -91,7 +91,8 @@ func FindBlog(c *gin.Context) {
 func UpdateCommentId(c *gin.Context) {
 	var comment service.Comment
 
-	comment_id, id_err := strconv.Atoi(c.Param("id"))
+	// comment_id, id_err := strconv.Atoi(c.Param("id"))
+	comment_id, id_err := strconv.ParseUint(c.Param("id"), 10, 64)
 	comment_status, status_err := strconv.Atoi(c.Query("status"))
 
 	// err := c.BindJSON(&comment)

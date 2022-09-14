@@ -17,6 +17,7 @@ const Nav = (props:{username:any}) => {
             // credentials: 'include', credentials 是用來用 cookie 的, 會在 response 裡的 set-cookie 取出(需要 server 設置)
         })
         localStorage.setItem('token', '')
+        localStorage.setItem('username', '')
         window.location.reload();
     }
 

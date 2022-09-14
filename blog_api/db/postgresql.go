@@ -2,6 +2,7 @@ package db
 
 import (
 	"api/conf"
+	"api/entity"
 	"api/utils"
 	"fmt"
 
@@ -11,6 +12,11 @@ import (
 )
 
 var Db *gorm.DB
+
+type Blog entity.Blog
+type Blogger entity.Blogger
+type BlogType entity.BlogType
+type Comment entity.Comment
 
 func init() {
 	var err error
@@ -27,6 +33,8 @@ func init() {
 
 	// connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode((logger.Info))})
+	Db.AutoMigrate(&Blog{}, &Blogger{}, &BlogType{}, &Comment{})
+
 	// Logger: Db.Logger.LogMode(4),
 	// })
 

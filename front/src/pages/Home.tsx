@@ -16,9 +16,12 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
     }, [])
 
 
-    if (!bloglist){
+    if (!bloglist || bloglist.length === 0){
         return (
-            <div>they're no any blog right now.</div>
+            <div>
+                <div>they're no any blog right now.</div>
+                <Link to="/postblog">Post first</Link>
+            </div>
         )
     }
     if (!localStorage.getItem('token')){
@@ -27,7 +30,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
                 {
                     bloglist.map(item=>
                         <label className="list-group-item rounded-3 py-3" key={item}>
-                            <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                            <Link to="/blog" className="d-block small opacity-50" onClick={() =>props.setBlogId(item['Id'])}>{item['title']}</Link>
                             <nav>Click count: {item['clickhit']}</nav>
                         </label>
                     )
@@ -45,7 +48,7 @@ const Home = (props: {setBlogId: (blogId: string) => void}) =>{
                     {
                     bloglist.map(item=>
                         <label className="list-group-item rounded-3 py-3" key={item}>
-                            <Link to="/blog" onClick={() =>props.setBlogId(item['id'])}>{item['title']}</Link>
+                            <Link to="/blog" onClick={() =>props.setBlogId(item['Id'])}>{item['title']}</Link>
                             <nav>Click count: {item['clickhit']}</nav>
                         </label>
                     )
